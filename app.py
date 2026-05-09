@@ -1010,12 +1010,13 @@ def render_selling_price_and_output():
     }
 
     # Add village lot price to calc_outputs for the village HTML template
+    asking_mb = get_s("land_asking_price_mb", 0) or 0
     if dev_type == "village":
         c["village_lot_price_per_sqwah"] = get_s("village_lot_price_per_sqwah", 0) or 0
-        html_sheet = generate_village_visual_html(project_data, c, image_paths)
+        html_sheet = generate_village_visual_html(project_data, c, image_paths, asking_mb=asking_mb)
         dl_filename = "village_bd_summary.html"
     else:
-        html_sheet = generate_condo_visual_html(project_data, c, image_paths)
+        html_sheet = generate_condo_visual_html(project_data, c, image_paths, asking_mb=asking_mb)
         dl_filename = "land_bd_summary.html"
 
     components.html(html_sheet, height=1400, scrolling=True)

@@ -20,7 +20,7 @@ def _img_tag(image_paths, key, alt, style=""):
     return f'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e0e0e0;border-radius:6px;color:#888;font-size:12px;font-family:sans-serif;text-align:center;padding:8px;">ไม่มีภาพ<br><small>{alt}</small></div>'
 
 
-def generate_condo_visual_html(project_data: dict, calc_outputs: dict, image_paths=None) -> str:
+def generate_condo_visual_html(project_data: dict, calc_outputs: dict, image_paths=None, asking_mb: float = 0.0) -> str:
     if image_paths is None:
         image_paths = {}
 
@@ -203,11 +203,9 @@ def generate_condo_visual_html(project_data: dict, calc_outputs: dict, image_pat
 
   <div class="card">
     <h3>มูลค่าโครงการโดยประมาณ</h3>
-    <div class="kv">กรณีต่ำ:</div>
-    <div class="big-num">{pv_low:,.0f}</div>
-    <div class="kv">ล้านบาท</div>
-    <div class="kv" style="margin-top:8px;">กรณีสูง:</div>
-    <div class="big-num">{pv_high:,.0f}</div>
+    <div class="kv">ตลาด: <b>{segment.get("segment","—")}</b></div>
+    <div class="kv" style="margin-top:6px;">มูลค่าโครงการ:</div>
+    <div class="big-num">{pv_low:,.0f}–{pv_high:,.0f}</div>
     <div class="kv">ล้านบาท</div>
     <div class="kv" style="margin-top:8px;font-size:11px;color:#888;">คำนวณจากพื้นที่ขายได้ × ราคา {selling_price:,.0f} บ./ตร.ม.</div>
   </div>
@@ -232,22 +230,22 @@ def generate_condo_visual_html(project_data: dict, calc_outputs: dict, image_pat
 <div class="cards-row" style="padding-top:0;">
 
   <div class="card" style="flex:2;">
-    <h3>ตารางราคาที่ดินตามสัดส่วน</h3>
+    <h3>Margin — ถ้าซื้อที่ดินที่ราคานี้ (มาตรฐานคอนโด 20–30%)</h3>
     <table style="width:100%;border-collapse:collapse;font-size:12px;">
       <thead>
         <tr style="background:#1a3a5c;color:#d4af37;">
           <th style="padding:5px 8px;text-align:left;">สัดส่วนที่ดิน</th>
-          <th style="padding:5px 8px;text-align:right;">กรณีต่ำ (ลบ.)</th>
-          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา (ต่ำ)</th>
-          <th style="padding:5px 8px;text-align:right;">กรณีสูง (ลบ.)</th>
-          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา (สูง)</th>
+          <th style="padding:5px 8px;text-align:right;">ราคาที่ดิน (ลบ.)</th>
+          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา</th>
+          <th style="padding:5px 8px;text-align:right;">เหลือ (ก่อสร้าง+กำไร)</th>
+          <th style="padding:5px 8px;text-align:center;">ความเห็น</th>
         </tr>
       </thead>
       <tbody>
-        {_lv_rows(c, c.get("total_sqwah",1))}
+        {_margin_table_html([0.20,0.25,0.30], (pv_low+pv_high)/2 if pv_high else pv_low, c.get("total_sqwah",1), segment.get("primary_ratio",0.25), "condo", asking_mb)}
       </tbody>
     </table>
-    <div class="kv" style="margin-top:8px;font-size:11px;color:#888;">* คำนวณจากมูลค่าโครงการ × สัดส่วน ÷ จำนวนตร.วา</div>
+    <div class="kv" style="margin-top:8px;font-size:11px;color:#888;">* อ้างอิงจากมูลค่าโครงการเฉลี่ย {((pv_low+pv_high)/2 if pv_high else pv_low):,.0f} ลบ. | ตลาด: {segment.get("segment","—")}</div>
   </div>
 
   <div class="card" style="flex:1;">
@@ -285,49 +283,72 @@ def generate_condo_visual_html(project_data: dict, calc_outputs: dict, image_pat
     return html
 
 
-def _lv_rows(c: dict, total_sqwah: float) -> str:
-    from modules.valuation_engine import calculate_land_value_by_ratio
-    pv_low = c.get("project_value_low_mb", 0)
-    pv_high = c.get("project_value_high_mb", 0)
+def _village_revenue_html(pv_low, pv_high):
+    if pv_high > pv_low:
+        house_rev = pv_high - pv_low
+        return (
+            f'<div class="kv" style="margin-top:8px;">รายได้จากที่ดิน:</div>'
+            f'<div class="big-num">{pv_low:,.0f}</div>'
+            f'<div class="kv">ล้านบาท</div>'
+            f'<div class="kv" style="margin-top:6px;">รายได้จากบ้าน: <b>+{house_rev:,.0f} ลบ.</b></div>'
+            f'<div class="kv">รวมทั้งหมด:</div>'
+            f'<div class="big-num">{pv_high:,.0f}</div>'
+            f'<div class="kv">ล้านบาท</div>'
+        )
+    return (
+        f'<div class="kv" style="margin-top:8px;">รายได้โครงการ:</div>'
+        f'<div class="big-num">{pv_low:,.0f}</div>'
+        f'<div class="kv">ล้านบาท</div>'
+    )
+
+
+def _margin_table_html(ratios, rev_base, total_sqwah, primary, dev_type, asking_mb=0):
+    def _verd(r):
+        if dev_type == "village":
+            if r < 0.35:   return ("ดีมาก",  "#27ae60", "#d5f5e3")
+            elif r <= 0.40: return ("แนะนำ",  "#27ae60", "#d5f5e3")
+            elif r <= 0.45: return ("พอดี",   "#e67e22", "#fdebd0")
+        else:
+            if r < 0.20:   return ("ดีมาก",  "#27ae60", "#d5f5e3")
+            elif r <= 0.25: return ("แนะนำ",  "#27ae60", "#d5f5e3")
+            elif r <= 0.30: return ("พอดี",   "#e67e22", "#fdebd0")
+        return ("เสี่ยง", "#e74c3c", "#fce4e4")
+
     rows = ""
-    for ratio in [0.20, 0.25, 0.30]:
-        lv_low = calculate_land_value_by_ratio(pv_low, ratio, total_sqwah)
-        lv_high = calculate_land_value_by_ratio(pv_high, ratio, total_sqwah)
-        bg = "#f0f4ff" if ratio == 0.25 else "transparent"
-        fw = "bold" if ratio == 0.25 else "normal"
+    for i, ratio in enumerate(ratios):
+        land_mb = rev_base * ratio
+        psw     = land_mb * 1_000_000 / total_sqwah if total_sqwah else 0
+        rem     = (1 - ratio) * 100
+        tag     = " ← แนะนำ" if ratio == primary else ""
+        vl, vc, vbg = _verd(ratio)
+        bg = "#eef2ff" if ratio == primary else ("#f8f8f8" if i % 2 == 0 else "transparent")
+        fw = "bold" if ratio == primary else "normal"
         rows += f"""
         <tr style="background:{bg};font-weight:{fw};">
-          <td style="padding:4px 8px;">{int(ratio*100)}%</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_low["land_value_mb"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_low["price_per_sqwah"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_high["land_value_mb"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_high["price_per_sqwah"]:,.0f}</td>
+          <td style="padding:5px 8px;">{int(ratio*100)}%{tag}</td>
+          <td style="padding:5px 8px;text-align:right;">{land_mb:,.0f}</td>
+          <td style="padding:5px 8px;text-align:right;">{psw:,.0f}</td>
+          <td style="padding:5px 8px;text-align:right;">{rem:.0f}%</td>
+          <td style="padding:5px 8px;text-align:center;"><span style="background:{vbg};color:{vc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;">{vl}</span></td>
+        </tr>"""
+
+    if asking_mb > 0 and rev_base > 0:
+        ask_r   = asking_mb / rev_base
+        ask_psw = asking_mb * 1_000_000 / total_sqwah if total_sqwah else 0
+        rem_a   = (1 - ask_r) * 100
+        vl, vc, vbg = _verd(ask_r)
+        rows += f"""
+        <tr style="background:#fffde7;font-weight:bold;border-top:2px solid #d4af37;">
+          <td style="padding:5px 8px;">&#9733; ราคาประกาศ ({ask_r*100:.1f}%)</td>
+          <td style="padding:5px 8px;text-align:right;">{asking_mb:,.0f}</td>
+          <td style="padding:5px 8px;text-align:right;">{ask_psw:,.0f}</td>
+          <td style="padding:5px 8px;text-align:right;">{rem_a:.0f}%</td>
+          <td style="padding:5px 8px;text-align:center;"><span style="background:{vbg};color:{vc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;">{vl}</span></td>
         </tr>"""
     return rows
 
 
-def _lv_rows_village(c: dict, total_sqwah: float) -> str:
-    from modules.valuation_engine import calculate_land_value_by_ratio
-    pv_low = c.get("project_value_low_mb", 0)
-    pv_high = c.get("project_value_high_mb", 0)
-    rows = ""
-    for ratio in [0.35, 0.40, 0.45]:
-        lv_low = calculate_land_value_by_ratio(pv_low, ratio, total_sqwah)
-        lv_high = calculate_land_value_by_ratio(pv_high, ratio, total_sqwah)
-        bg = "#f0f4ff" if ratio == 0.40 else "transparent"
-        fw = "bold" if ratio == 0.40 else "normal"
-        rows += f"""
-        <tr style="background:{bg};font-weight:{fw};">
-          <td style="padding:4px 8px;">{int(ratio*100)}%</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_low["land_value_mb"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_low["price_per_sqwah"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_high["land_value_mb"]:,.0f}</td>
-          <td style="padding:4px 8px;text-align:right;">{lv_high["price_per_sqwah"]:,.0f}</td>
-        </tr>"""
-    return rows
-
-
-def generate_village_visual_html(project_data: dict, calc_outputs: dict, image_paths=None) -> str:
+def generate_village_visual_html(project_data: dict, calc_outputs: dict, image_paths=None, asking_mb: float = 0.0) -> str:
     if image_paths is None:
         image_paths = {}
 
@@ -482,12 +503,7 @@ def generate_village_visual_html(project_data: dict, calc_outputs: dict, image_p
     <h3>รายได้โครงการโดยประมาณ</h3>
     <div class="kv">ราคาที่ดินจัดสรร: <b>{lot_price:,.0f} บ./ตร.วา</b></div>
     <div class="kv">ตลาด: <b>{segment.get("segment","—")}</b></div>
-    <div class="kv" style="margin-top:8px;">รายได้กรณีต่ำ (ที่ดินเท่านั้น):</div>
-    <div class="big-num">{pv_low:,.0f}</div>
-    <div class="kv">ล้านบาท</div>
-    <div class="kv" style="margin-top:8px;">รายได้กรณีสูง (รวมบ้าน):</div>
-    <div class="big-num">{pv_high:,.0f}</div>
-    <div class="kv">ล้านบาท</div>
+    {_village_revenue_html(pv_low, pv_high)}
   </div>
 
   <div class="card">
@@ -520,22 +536,22 @@ def generate_village_visual_html(project_data: dict, calc_outputs: dict, image_p
 <div class="cards-row" style="padding-top:0;">
 
   <div class="card" style="flex:2;">
-    <h3>ตารางราคาที่ดินตามสัดส่วน (หมู่บ้านจัดสรร)</h3>
+    <h3>Margin — ถ้าซื้อที่ดินที่ราคานี้ (มาตรฐานหมู่บ้านจัดสรร 35–45%)</h3>
     <table style="width:100%;border-collapse:collapse;font-size:12px;">
       <thead>
         <tr style="background:#1a3a5c;color:#d4af37;">
           <th style="padding:5px 8px;text-align:left;">สัดส่วนที่ดิน</th>
-          <th style="padding:5px 8px;text-align:right;">กรณีต่ำ (ลบ.)</th>
-          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา (ต่ำ)</th>
-          <th style="padding:5px 8px;text-align:right;">กรณีสูง (ลบ.)</th>
-          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา (สูง)</th>
+          <th style="padding:5px 8px;text-align:right;">ราคาที่ดิน (ลบ.)</th>
+          <th style="padding:5px 8px;text-align:right;">บ./ตร.วา</th>
+          <th style="padding:5px 8px;text-align:right;">เหลือ (ก่อสร้าง+กำไร)</th>
+          <th style="padding:5px 8px;text-align:center;">ความเห็น</th>
         </tr>
       </thead>
       <tbody>
-        {_lv_rows_village(c, c.get("total_sqwah",1))}
+        {_margin_table_html([0.35,0.40,0.45], pv_low, c.get("total_sqwah",1), segment.get("primary_ratio",0.40), "village", asking_mb)}
       </tbody>
     </table>
-    <div class="kv" style="margin-top:8px;font-size:11px;color:#888;">* คำนวณจากมูลค่าโครงการ × สัดส่วน ÷ จำนวนตร.วา | สัดส่วนที่ดินหมู่บ้านจัดสรร: 35–45%</div>
+    <div class="kv" style="margin-top:8px;font-size:11px;color:#888;">* อ้างอิงจากรายได้ {pv_low:,.0f} ลบ. | ตลาด: {segment.get("segment","—")} | สัดส่วนมาตรฐาน 35–45%</div>
   </div>
 
   <div class="card" style="flex:1;">
