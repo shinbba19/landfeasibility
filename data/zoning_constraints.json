@@ -1,0 +1,106 @@
+[
+  {
+    "thai_code": "พ.1",
+    "description": "อาคารชุด ≤ 5,000 ตร.ม./อาคาร อนุญาต; เกินกว่านั้นห้ามโดยเด็ดขาด",
+    "condo_rules": [
+      {
+        "tier": 1,
+        "min_sqm": 0,
+        "max_sqm": 5000,
+        "condition": "allowed",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "อนุญาตโดยไม่มีเงื่อนไขเพิ่มเติม"
+      },
+      {
+        "tier": 2,
+        "min_sqm": 5000,
+        "max_sqm": null,
+        "condition": "prohibited",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "ห้าม — ไม่มีข้อยกเว้น"
+      }
+    ]
+  },
+  {
+    "thai_code": "พ.2",
+    "description": "อาคารชุดอนุญาตทั่วไป",
+    "condo_rules": [
+      {
+        "tier": 1,
+        "min_sqm": 0,
+        "max_sqm": null,
+        "condition": "allowed",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "อนุญาตทั่วไป ต้องตรวจสอบกฎหมายควบคุมอาคารเพิ่มเติม"
+      }
+    ]
+  },
+  {
+    "thai_code": "พ.3",
+    "description": "อาคารชุดมีเงื่อนไขตามขนาด — กลุ่มเงื่อนไข (1) และ (2)",
+    "condo_rules": [
+      {
+        "tier": 1,
+        "min_sqm": 0,
+        "max_sqm": 2000,
+        "condition": "allowed",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "อาคารชุด < 2,000 ตร.ม. อนุญาตทั่วไป"
+      },
+      {
+        "tier": 2,
+        "min_sqm": 2000,
+        "max_sqm": 10000,
+        "condition": "conditional",
+        "requires_road_m": 10,
+        "requires_transit_m": 500,
+        "condition_logic": "OR",
+        "note": "2,000–10,000 ตร.ม.: ต้องถนน ≥ 10 ม. หรือ ≤ 500 ม. จากรถไฟฟ้า (กลุ่มเงื่อนไข 1)"
+      },
+      {
+        "tier": 3,
+        "min_sqm": 10000,
+        "max_sqm": null,
+        "condition": "conditional",
+        "requires_road_m": 30,
+        "requires_transit_m": 500,
+        "condition_logic": "OR",
+        "note": "> 10,000 ตร.ม.: ต้องถนน ≥ 30 ม. หรือ ≤ 500 ม. จากรถไฟฟ้า (กลุ่มเงื่อนไข 2)"
+      }
+    ]
+  },
+  {
+    "thai_code": "พ.4",
+    "description": "อาคารชุดอนุญาตทั่วไป",
+    "condo_rules": [
+      {
+        "tier": 1,
+        "min_sqm": 0,
+        "max_sqm": null,
+        "condition": "allowed",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "อนุญาตทั่วไป ต้องตรวจสอบกฎหมายควบคุมอาคารเพิ่มเติม"
+      }
+    ]
+  },
+  {
+    "thai_code": "พ.5",
+    "description": "อาคารชุดอนุญาตทั่วไป",
+    "condo_rules": [
+      {
+        "tier": 1,
+        "min_sqm": 0,
+        "max_sqm": null,
+        "condition": "allowed",
+        "requires_road_m": null,
+        "requires_transit_m": null,
+        "note": "อนุญาตทั่วไป ต้องตรวจสอบกฎหมายควบคุมอาคารเพิ่มเติม"
+      }
+    ]
+  }
+]

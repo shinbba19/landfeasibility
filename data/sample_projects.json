@@ -1,0 +1,47 @@
+[
+  {
+    "project_name": "Sukhumvit 71 Land",
+    "district": "Watthana",
+    "subdistrict": "Khlong Toei Nuea",
+    "location_note": "ใกล้ BTS พระโขนง / Sukhumvit 71",
+    "latitude": null,
+    "longitude": null,
+    "land": {
+      "rai": 1,
+      "ngan": 3,
+      "wah": 0,
+      "total_sqwah": 700,
+      "total_sqm": 2800
+    },
+    "zoning": {
+      "color": "red",
+      "color_thai": "สีแดง",
+      "zone_code": "พ.3",
+      "far": 7.0,
+      "osr": 0.10,
+      "transit_distance_m": 450
+    },
+    "road": {
+      "road_type": "Public road",
+      "road_name": "Sukhumvit 71",
+      "known_width_m": 12,
+      "lane_count": 4,
+      "has_median": false,
+      "has_tall_building": true,
+      "official_width_confirmed": false
+    },
+    "analysis": {
+      "max_gfa_sqm": 19600,
+      "bonus_gfa_sqm": 3920,
+      "total_gfa_sqm": 23520,
+      "high_rise_possible": true,
+      "saleable_area_low_sqm": 9800,
+      "saleable_area_high_sqm": 10780,
+      "selling_price_per_sqm": 150000,
+      "project_value_low_mb": 1470,
+      "project_value_high_mb": 1617,
+      "land_value_at_25pct_mb": 368,
+      "land_value_per_sqwah_at_25pct": 525000
+    }
+  }
+]

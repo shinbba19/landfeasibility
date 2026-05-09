@@ -1,0 +1,167 @@
+[
+  {
+    "thai_code": "ย.1",
+    "color": "yellow",
+    "color_thai": "สีเหลือง",
+    "land_use_type": "low_density_residential",
+    "far": 1.0,
+    "osr": 0.50,
+    "default_recommendation": "low_density_housing",
+    "condo_allowed": false,
+    "notes": "ที่อยู่อาศัยหนาแน่นน้อย — ไม่อนุญาตอาคารชุด"
+  },
+  {
+    "thai_code": "ย.2",
+    "color": "yellow",
+    "color_thai": "สีเหลือง",
+    "land_use_type": "low_density_residential",
+    "far": 1.5,
+    "osr": 0.40,
+    "default_recommendation": "low_density_housing",
+    "condo_allowed": false,
+    "notes": "ที่อยู่อาศัยหนาแน่นน้อย — ไม่อนุญาตอาคารชุด"
+  },
+  {
+    "thai_code": "ย.3",
+    "color": "yellow",
+    "color_thai": "สีเหลือง",
+    "land_use_type": "low_density_residential",
+    "far": 2.5,
+    "osr": 0.30,
+    "default_recommendation": "low_density_housing",
+    "condo_allowed": false,
+    "notes": "ที่อยู่อาศัยหนาแน่นน้อย — ไม่อนุญาตอาคารชุด"
+  },
+  {
+    "thai_code": "ย.4",
+    "color": "yellow",
+    "color_thai": "สีเหลือง",
+    "land_use_type": "low_density_residential",
+    "far": 3.0,
+    "osr": 0.30,
+    "default_recommendation": "low_density_housing",
+    "condo_allowed": false,
+    "notes": "ที่อยู่อาศัยหนาแน่นน้อย — ไม่อนุญาตอาคารชุด"
+  },
+  {
+    "thai_code": "ย.5",
+    "color": "orange",
+    "color_thai": "สีส้ม",
+    "land_use_type": "medium_density_residential",
+    "far": 4.0,
+    "osr": 0.30,
+    "default_recommendation": "apartment_or_low_rise",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นปานกลาง — อาคารชุดขนาดเล็กอาจได้"
+  },
+  {
+    "thai_code": "ย.6",
+    "color": "orange",
+    "color_thai": "สีส้ม",
+    "land_use_type": "medium_density_residential",
+    "far": 4.5,
+    "osr": 0.30,
+    "default_recommendation": "apartment_or_low_rise",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นปานกลาง"
+  },
+  {
+    "thai_code": "ย.7",
+    "color": "orange",
+    "color_thai": "สีส้ม",
+    "land_use_type": "medium_density_residential",
+    "far": 5.0,
+    "osr": 0.30,
+    "default_recommendation": "low_rise_or_condo",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นปานกลาง"
+  },
+  {
+    "thai_code": "ย.8",
+    "color": "brown",
+    "color_thai": "สีน้ำตาล",
+    "land_use_type": "high_density_residential",
+    "far": 6.0,
+    "osr": 0.30,
+    "default_recommendation": "condo",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นมาก"
+  },
+  {
+    "thai_code": "ย.9",
+    "color": "brown",
+    "color_thai": "สีน้ำตาล",
+    "land_use_type": "high_density_residential",
+    "far": 7.0,
+    "osr": 0.30,
+    "default_recommendation": "condo",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นมาก"
+  },
+  {
+    "thai_code": "ย.10",
+    "color": "brown",
+    "color_thai": "สีน้ำตาล",
+    "land_use_type": "high_density_residential",
+    "far": 8.0,
+    "osr": 0.30,
+    "default_recommendation": "condo",
+    "condo_allowed": true,
+    "notes": "ที่อยู่อาศัยหนาแน่นมาก"
+  },
+  {
+    "thai_code": "พ.1",
+    "color": "red",
+    "color_thai": "สีแดง",
+    "land_use_type": "commercial",
+    "far": 5.0,
+    "osr": 0.10,
+    "default_recommendation": "commercial_or_small_condo",
+    "condo_allowed": true,
+    "notes": "พาณิชยกรรม — อาคารชุดไม่เกิน 5,000 ตร.ม./อาคาร; เกินกว่านั้นห้าม ไม่มีข้อยกเว้น"
+  },
+  {
+    "thai_code": "พ.2",
+    "color": "red",
+    "color_thai": "สีแดง",
+    "land_use_type": "commercial",
+    "far": 6.0,
+    "osr": 0.10,
+    "default_recommendation": "commercial_or_condo",
+    "condo_allowed": true,
+    "notes": "พาณิชยกรรม"
+  },
+  {
+    "thai_code": "พ.3",
+    "color": "red",
+    "color_thai": "สีแดง",
+    "land_use_type": "commercial",
+    "far": 7.0,
+    "osr": 0.10,
+    "default_recommendation": "condo_or_commercial",
+    "condo_allowed": true,
+    "notes": "พาณิชยกรรม — อาคารชุด 2,000–10,000 ตร.ม. ต้องถนน≥10ม. หรือ ≤500ม.จากรถไฟฟ้า; เกิน 10,000 ตร.ม. ต้องถนน≥30ม. หรือ ≤500ม.จากรถไฟฟ้า"
+  },
+  {
+    "thai_code": "พ.4",
+    "color": "red",
+    "color_thai": "สีแดง",
+    "land_use_type": "commercial",
+    "far": 8.0,
+    "osr": 0.10,
+    "default_recommendation": "commercial_or_condo",
+    "condo_allowed": true,
+    "notes": "พาณิชยกรรม"
+  },
+  {
+    "thai_code": "พ.5",
+    "color": "red",
+    "color_thai": "สีแดง",
+    "land_use_type": "commercial",
+    "far": 10.0,
+    "osr": 0.10,
+    "default_recommendation": "commercial_high_intensity",
+    "condo_allowed": true,
+    "notes": "พาณิชยกรรมความเข้มสูง"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "condition": "1 lane, no tall building nearby",
+    "min_width": 0,
+    "max_width": 5.99,
+    "label": "less than 6 m",
+    "confidence": "Low"
+  },
+  {
+    "condition": "1 lane, has 8-storey condo nearby",
+    "min_width": 6,
+    "max_width": 6,
+    "label": "about 6 m",
+    "confidence": "Low"
+  },
+  {
+    "condition": "2 lanes, has 8-storey condo nearby",
+    "min_width": 6,
+    "max_width": 9.99,
+    "label": "6–9.99 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "2 lanes, has 10+ storey building nearby",
+    "min_width": 10,
+    "max_width": 17.99,
+    "label": "assume over 10 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "3 lanes",
+    "min_width": 10,
+    "max_width": 11.99,
+    "label": "10–11.99 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "4 lanes",
+    "min_width": 12,
+    "max_width": 17.99,
+    "label": "12–17.99 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "6 lanes, no median",
+    "min_width": 18,
+    "max_width": 29.99,
+    "label": "over 18 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "6 lanes, with median",
+    "min_width": 30,
+    "max_width": 30,
+    "label": "about 30 m",
+    "confidence": "Medium"
+  },
+  {
+    "condition": "more than 6 lanes",
+    "min_width": 40,
+    "max_width": 60,
+    "label": "40–60 m",
+    "confidence": "Medium"
+  }
+]
